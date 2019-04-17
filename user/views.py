@@ -53,4 +53,15 @@ class loginscreen(View):
             message = "Account not found"
             return render(request, 'registration/login.html', {"message": message})
 
-        return render(request, 'registration/login.html', {"message": "login worked but doesnt do anything"})
+        request.session["currentUser"] = CurrentUser
+        request.session.set_expiry(300)
+        return redirect('/gift/')
+
+
+class giftpage(View):
+    def get(self, request):
+        user = request.session.get("currentUser", 0)
+        return render(request, 'user/gifts.html', {"user": user})
+
+    def post(self, request):
+        return render(request, 'user/gifts.html')
